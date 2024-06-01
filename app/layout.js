@@ -1,7 +1,9 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-
+import UserReducer from "@/utils/userContext";
 const inter = Inter({ subsets: ["latin"] });
+import { NextUIProvider } from "@nextui-org/react";
+import NavBarComponent from "@/components/Navbar";
 
 export const metadata = {
   title: "Create Next App",
@@ -11,7 +13,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <NextUIProvider>
+          <UserReducer>
+            <NavBarComponent />
+            {children}
+          </UserReducer>
+        </NextUIProvider>
+      </body>
     </html>
   );
 }

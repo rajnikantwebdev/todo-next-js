@@ -4,6 +4,7 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -13,9 +14,9 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        mainColor: "#460f9d",
-        secondColor: "#eff4e8",
-        thirdColor: "#05aed5",
+        mainColor: "#121212",
+        secondColor: "#1E1E1E",
+        thirdColor: "#BB86FC",
       },
     },
   },
