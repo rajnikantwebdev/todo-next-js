@@ -8,8 +8,18 @@ cloudinary.config({
 
 const uploadToCloud = async (localPath) => {
   try {
-    await cloudinary.uploader.upload_stream(localPath, {
-      resource_type: "auto",
+    return await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream({ resource_type: "auto" }, (err, result) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          if (result) {
+            resolve(result?.url);
+          }
+        })
+        .end(localPath);
     });
   } catch (error) {
     console.log("error while upload to cloudinary", error);

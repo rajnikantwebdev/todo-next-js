@@ -1,61 +1,65 @@
 import uploadToCloud from "@/utils/cloudinary";
-import { uploadMiddleware } from "@/middlewares/multer";
-import { NextResponse } from "next/server";
-
-// export async function POST(req, res) {
-//     uploadMiddleware()
-//   try {
-//     const FormData = await req.formData();
-//     const title = FormData.get("title");
-//     const description = FormData.get("description");
-//     const img = FormData.get("img");
-//     const video = FormData?.get("video");
-//     const author = FormData.get("author");
-
-//     console.log(title, description, img, video, author);
-
-//     return Response.json({ FormData });
-//   } catch (error) {
-//     console.log("Error while uploading the blog...");
-//     throw new Error(error?.message || "Something went wrong try again later!");
-//   }
-// }
+import { supabase } from "@/utils/supabase";
+import { Blog } from "@/models/Bog.models";
+import Cookies from "js-cookie";
+import { createClient } from "@/utils/supabaseServer";
 
 export async function POST(request) {
-  uploadMiddleware(req, res, async (err) => {
-    if (err) {
-      return res.status(500).json({ error: "File upload failed." });
-    }
+  try {
+    const supabase = createClient();
 
-    try {
-      const { title, description, author } = req.body;
-      const img = req.files?.img ? req.files.img[0] : null;
-      const video = req.files?.video ? req.files.video[0] : null;
-
-      let imgUrl = null;
-      let videoUrl = null;
-
-      if (img) {
-        const imgResult = await uploadToCloud(img.buffer);
-        imgUrl = imgResult.secure_url;
-      }
-      console.log("img: ", img);
-      if (video) {
-        const videoResult = await uploadToCloud(video.buffer);
-        videoUrl = videoResult.secure_url;
-      }
-
-      console.log(title, description, imgUrl, videoUrl, author);
-
-      return Response.status(200).json({
-        title,
-        description,
-        imgUrl,
-        videoUrl,
-        author,
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+      console.log("error in access_token: ", error);
+      return new Response(JSON.stringify({ message: "Unauthorized access" }), {
+        status: 400,
       });
-    } catch (error) {
-      console.error("Error while uploading the blog...", error);
     }
-  });
+
+    const supaId = data?.user?.id;
+    const FormData = await request.formData();
+    const title = FormData.get("title");
+    const description = FormData.get("description");
+    const img = FormData.get("img");
+    const video = FormData?.get("video") || null;
+    const author = FormData.get("author");
+
+    if ([title, description, author].some((value) => value.trim() === "")) {
+      throw new Error("All fields are required");
+    }
+
+    if (!img) {
+      throw new Error("Image file is required");
+    }
+    const imgBuffer = await img.arrayBuffer();
+
+    let videoBuffer;
+    let videoCloudBuffer;
+    let uploadVideo;
+
+    if (video !== null) {
+      videoBuffer = await video.arrayBuffer();
+      videoCloudBuffer = new Uint8Array(videoBuffer);
+      uploadVideo = await uploadToCloud(videoCloudBuffer);
+    }
+
+    const buffer = new Uint8Array(imgBuffer);
+    const uploadImage = await uploadToCloud(buffer);
+
+    const blogData = await Blog.create({
+      supaId: supaId,
+      title: title,
+      description: description,
+      img: uploadImage,
+      video: uploadVideo || "",
+      author: author,
+    });
+
+    return new Response(JSON.stringify({ blogData }), {
+      status: 200,
+    });
+  } catch (error) {
+    console.log("Error while uploading the blog...", error);
+    throw new Error(error?.message || "Something went wrong try again later!");
+  }
 }

@@ -1,7 +1,11 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 
 const blogSchema = new Schema(
   {
+    supaId: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -27,5 +31,4 @@ const blogSchema = new Schema(
   }
 );
 
-const Blog = model("Blog", blogSchema);
-export default Blog;
+export const Blog = models.Blog || model("Blog", blogSchema);

@@ -3,9 +3,11 @@
 import React, { useContext } from "react";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { supabase } from "@/utils/supabase";
+
 import { usePathname, useRouter } from "next/navigation";
 import { UserContext } from "@/utils/userContext";
+import axios from "axios";
+import { userSignup, userLogin } from "@/app/login/action";
 
 const authenticationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -20,47 +22,44 @@ const UserFormAuthentication = () => {
   const { setUser } = useContext(UserContext);
   const pathName = usePathname();
 
-  const signUpUser = async (email, password) => {
-    try {
-      let { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-      });
-      if (error) {
-        console.log("error while registering, ", error);
-        throw error;
-      }
-      console.log("data: ", data);
-      setUser(data?.user);
-      redirect.push("/");
-    } catch (error) {
-      console.log("register error: ", error);
-    }
-  };
+  // const signUpUser = async (email, password) => {
+  //   try {
+  //     let { data, error } = await supabase.auth.signUp({
+  //       email: email,
+  //       password: password,
+  //     });
 
-  const loginUser = async (email, password) => {
-    try {
-      let { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-      });
+  //     if (error) {
+  //       console.log("error while registering, ", error);
+  //       throw error;
+  //     }
+  //     console.log("data: ", data);
+  //     setUser(data?.user);
+  //     redirect.push("/");
+  //   } catch (error) {
+  //     console.log("register error: ", error);
+  //   }
+  // };
 
-      if (error) {
-        throw error;
-      }
-      console.log("login data: ", data);
-      setUser(data?.user);
-      redirect.push("/");
-    } catch (error) {
-      console.log("error while logging ", error);
-    }
-  };
+  // const loginUser = async (email, password) => {
+  //   try {
+  //     const response = await axios.post("http://localhost:3000/api/login", {
+  //       email,
+  //       password,
+  //     });
+  //     if (response) {
+  //       redirect.push("/");
+  //     }
+  //   } catch (error) {
+  //     console.log("while logging: ", error);
+  //   }
+  // };
 
   return (
     <div className="bg-secondColor shadow-md px-12 py-8 h-screen flex items-start flex-col justify-center">
       <div className="mb-4">
-        <h1 className="text-5xl font-bold">B-Next</h1>
-        <h4 className="text-sm">
+        <h1 className="text-5xl font-bold text-thirdColor">B-Next</h1>
+        <h4 className="text-sm text-purple-300">
           Create Blog whenever
           <br />
           you want, how
@@ -71,126 +70,90 @@ const UserFormAuthentication = () => {
       {pathName === "/register" ? (
         <>
           <div className="mb-12">
-            <h2 className="text-3xl">Register yourself!</h2>
+            <h2 className="text-3xl text-thirdColor">Register yourself!</h2>
           </div>
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            validationSchema={authenticationSchema}
-            onSubmit={(values, { setSubmitting }) => {
-              signUpUser(values.email, values.password);
-              setSubmitting(false);
-            }}
-          >
-            {({
-              values,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-            }) => (
-              <Form onSubmit={handleSubmit}>
-                <div className="space-y-4">
-                  <div className="whitespace-pre-wrap">
-                    <Field
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                      className="px-2 py-1 focus:outline-none"
-                    />
-                    <br />
-                    <ErrorMessage
-                      name="email"
-                      component="div"
-                      className="text-red-400 text-sm"
-                    />
-                  </div>
-                  <div className="whitespace-pre-wrap">
-                    <Field
-                      type="password"
-                      name="password"
-                      placeholder="Password"
-                      className="px-2 py-1 focus:outline-none"
-                    />
-                    <br />
-                    <ErrorMessage
-                      name="password"
-                      component="div"
-                      className="text-red-400 text-sm"
-                    />
-                  </div>
-                  <button
-                    className="bg-mainColor text-secondColor px-2 py-1"
-                    type="submit"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Registering" : "Register"}
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
+          <form>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="email" className="text-white">
+                  Email:
+                </label>
+                <br />
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="Email"
+                  className="px-2 py-1 bg-mainColor focus:border-b-2 focus:outline-none text-white"
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="text-white">
+                  Password:
+                </label>
+                <br />
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  placeholder="password"
+                  className="px-2 py-1 bg-mainColor focus:border-b-2 focus:outline-none text-white"
+                />
+              </div>
+            </div>
+            <button
+              className="mt-4 bg-thirdColor text-white px-4 py-1"
+              formAction={userSignup}
+            >
+              Register
+            </button>
+          </form>
         </>
       ) : pathName === "/login" ? (
         <>
           <div className="mb-12">
-            <h2 className="text-3xl">Login Yourself!</h2>
+            <h2 className="text-3xl  text-thirdColor">Login Yourself!</h2>
           </div>
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            validationSchema={authenticationSchema}
-            onSubmit={(values, { setSubmitting }) => {
-              loginUser(values.email, values.password);
-              setSubmitting(false);
-            }}
-          >
-            {({
-              values,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-            }) => (
-              <Form onSubmit={handleSubmit}>
-                <div className="space-y-4">
-                  <div className="whitespace-pre-wrap">
-                    <Field
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                      className="px-2 py-1 focus:outline-none"
-                    />
-                    <br />
-                    <ErrorMessage
-                      name="email"
-                      component="div"
-                      className="text-red-400 text-sm"
-                    />
-                  </div>
-                  <div className="whitespace-pre-wrap">
-                    <Field
-                      type="password"
-                      name="password"
-                      placeholder="Password"
-                      className="px-2 py-1 focus:outline-none"
-                    />
-                    <br />
-                    <ErrorMessage
-                      name="password"
-                      component="div"
-                      className="text-red-400 text-sm"
-                    />
-                  </div>
-                  <button
-                    className="bg-mainColor text-secondColor px-2 py-1"
-                    type="submit"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Logging in" : "Login"}
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
+          <form>
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="email" className="text-white">
+                  Email:
+                </label>
+                <br />
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="Email"
+                  className="px-2 py-1 bg-mainColor focus:border-b-2 focus:outline-none text-white"
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="text-white">
+                  Password:
+                </label>
+                <br />
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  placeholder="password"
+                  className="px-2 py-1 bg-mainColor focus:border-b-2 focus:outline-none text-white"
+                />
+              </div>
+            </div>
+            <button
+              className="mt-4 bg-thirdColor text-white px-4 py-1"
+              formAction={userLogin}
+            >
+              Log in
+            </button>
+          </form>
         </>
       ) : (
         <div>Invalid path</div>

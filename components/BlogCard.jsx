@@ -1,22 +1,31 @@
 import React from "react";
-import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
+import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import Image from "next/image";
+import Link from "next/link";
 
-export default function BlogCard() {
+export default function BlogCard({ data }) {
   return (
-    <Card className="py-4 bg-secondColor rounded-xl hover:shadow-purple-300 shadow-inner cursor-pointer">
-      <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+    <Card className="py-4 px-2 w-72 bg-secondColor rounded-xl hover:shadow-purple-300 shadow-inner cursor-pointer">
+      <CardHeader className="pb-0 pt-2 flex-col items-start">
         <p className="text-tiny text-thirdColor uppercase font-bold mb-2">
-          Daily Mix
+          {data?.title > 60
+            ? data?.title.trim().slice(0, 60) + "..."
+            : data?.title.trim()}
         </p>
-        <h4 className="font-bold text-large text-purple-200">Frontend Radio</h4>
-        <small className="text-default-500 text-purple-100">12 Tracks</small>
+        <h4 className="font-bold text-normal text-purple-200">
+          {data?.author}
+        </h4>
+        <small className="text-default-500 text-purple-100 mb-8">
+          {new Date(data?.createdAt).toLocaleDateString()}
+        </small>
       </CardHeader>
-      <CardBody className="overflow-visible py-2">
+      <CardBody className=" w-full relative h-48">
         <Image
-          alt="Card background"
-          className="object-cover rounded-xl"
-          src="https://nextui.org/images/hero-card-complete.jpeg"
-          width={270}
+          src={data?.img}
+          layout="fill"
+          objectFit="cover"
+          alt="picture"
+          className="rounded-xl"
         />
       </CardBody>
     </Card>

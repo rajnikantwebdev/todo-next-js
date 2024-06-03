@@ -8,6 +8,9 @@ const nextConfig = {
     messagingSenderId: "1041360882741",
     appId: "1:1041360882741:web:ce7d111e2d94aed5ad357c",
   },
+  images: {
+    domains: ["res.cloudinary.com"],
+  },
 };
 
 export default nextConfig;
