@@ -27,7 +27,7 @@ const Hero = () => {
     <section className="flex gap-12 py-8 px-8 flex-wrap">
       <AddBlogIcon />
       {blogs?.map((blog) => {
-        return <BlogCard data={blog} />;
+        return <BlogCard key={blog?._id} data={blog} />;
       })}
     </section>
   );

@@ -105,7 +105,7 @@ const Page = () => {
       />
 
       {allComments !== null ? (
-        allComments?.map((c) => <UserComponent comment={c} />)
+        allComments?.map((c) => <UserComponent key={c?._id} comment={c} />)
       ) : (
         <p className="text-thirdColor text-lg">No comments</p>
       )}
