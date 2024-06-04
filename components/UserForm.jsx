@@ -18,42 +18,7 @@ const authenticationSchema = Yup.object().shape({
 });
 
 const UserFormAuthentication = () => {
-  const redirect = useRouter();
-  const { setUser } = useContext(UserContext);
   const pathName = usePathname();
-
-  // const signUpUser = async (email, password) => {
-  //   try {
-  //     let { data, error } = await supabase.auth.signUp({
-  //       email: email,
-  //       password: password,
-  //     });
-
-  //     if (error) {
-  //       console.log("error while registering, ", error);
-  //       throw error;
-  //     }
-  //     console.log("data: ", data);
-  //     setUser(data?.user);
-  //     redirect.push("/");
-  //   } catch (error) {
-  //     console.log("register error: ", error);
-  //   }
-  // };
-
-  // const loginUser = async (email, password) => {
-  //   try {
-  //     const response = await axios.post("http://localhost:3000/api/login", {
-  //       email,
-  //       password,
-  //     });
-  //     if (response) {
-  //       redirect.push("/");
-  //     }
-  //   } catch (error) {
-  //     console.log("while logging: ", error);
-  //   }
-  // };
 
   return (
     <div className="bg-secondColor shadow-md px-12 py-8 h-screen flex items-start flex-col justify-center">

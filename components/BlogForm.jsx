@@ -167,6 +167,7 @@ const BlogForm = () => {
 
                 <input
                   name="video"
+                  className="text-white"
                   type="file"
                   accept="video/*"
                   onChange={(event) =>

@@ -1,5 +1,11 @@
 import React from "react";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Button,
+} from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,6 +34,14 @@ export default function BlogCard({ data }) {
           className="rounded-xl"
         />
       </CardBody>
+      <CardFooter className="mt-4">
+        <Link
+          href={`/blog/${data?._id}`}
+          className="bg-thirdColor py-1 px-2 text-white rounded-lg"
+        >
+          Read more
+        </Link>
+      </CardFooter>
     </Card>
   );
 }

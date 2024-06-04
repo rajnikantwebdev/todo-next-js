@@ -24,7 +24,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="flex justify-center gap-12 py-8 px-8">
+    <section className="flex gap-12 py-8 px-8 flex-wrap">
       <AddBlogIcon />
       {blogs?.map((blog) => {
         return <BlogCard data={blog} />;
