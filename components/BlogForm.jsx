@@ -42,7 +42,7 @@ const BlogForm = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:3000/api/upload",
+        `${process.env.NEXT_PUBLIC_URL}/api/upload`,
         formData
       );
       if (response) {

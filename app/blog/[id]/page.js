@@ -18,7 +18,7 @@ const Page = () => {
     const getBlog = async () => {
       try {
         const response = await axios.post(
-          `http://localhost:3000/api/fetchBlogWithId?id=${id}`
+          `${process.env.NEXT_PUBLIC_URL}/api/fetchBlogWithId?id=${id}`
         );
         if (response.data) {
           setBlog(response.data.data);
@@ -35,7 +35,7 @@ const Page = () => {
   const addComment = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/comment?id=${blog?._id}`,
+        `${process.env.NEXT_PUBLIC_URL}/api/comment?id=${blog?._id}`,
         {
           message: content,
         }
@@ -51,7 +51,7 @@ const Page = () => {
     const getComments = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/getComment?id=${blog._id}`
+          `${process.env.NEXT_PUBLIC_URL}/api/getComment?id=${blog._id}`
         );
         if (response) {
           setAllComments(response?.data?.data);

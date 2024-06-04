@@ -10,7 +10,9 @@ const Hero = () => {
   const [blogs, setBlogs] = useState();
   const getData = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/fetchBlog");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_URL}/api/fetchBlog`
+      );
       if (response) {
         setBlogs(response?.data?.data);
       }
