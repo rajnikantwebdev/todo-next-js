@@ -73,8 +73,11 @@ const Page = () => {
   return (
     <section className="w-full px-8 py-12">
       <div className="flex items-center gap-8">
-        <div className="flex-1 bg-white">
-          <Image width={1280} height={720} alt="blog-picture" src={blog.img} />
+        <div
+          className="flex-1 bg-white relative"
+          style={{ width: "1280px", height: "720px" }}
+        >
+          <Image fill objectFit="contain" alt="blog-picture" src={blog.img} />
         </div>
         {blog.video && blog.video !== "" && (
           <div className="flex-1">

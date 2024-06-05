@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export default function BlogCard({ data }) {
   return (
-    <Card className="py-4 px-2 w-72 bg-secondColor rounded-xl hover:shadow-purple-300 shadow-inner cursor-pointer">
+    <Card className="py-4 px-2 w-80 bg-secondColor rounded-xl hover:shadow-purple-300 shadow-inner cursor-pointer">
       <CardHeader className="pb-0 pt-2 flex-col items-start">
         <p className="text-tiny text-thirdColor uppercase font-bold mb-2">
           {data?.title > 60
@@ -22,10 +22,13 @@ export default function BlogCard({ data }) {
           {data?.author}
         </h4>
         <small className="text-default-500 text-purple-100 mb-8">
-          {new Date(data?.createdAt).toLocaleDateString()}
+          {new Date(data?.createdAt).toDateString()}
         </small>
       </CardHeader>
-      <CardBody className=" w-full relative h-48">
+      <CardBody
+        className="w-full relative"
+        style={{ width: "300px", height: "180px" }}
+      >
         <Image
           src={data?.img}
           layout="fill"
