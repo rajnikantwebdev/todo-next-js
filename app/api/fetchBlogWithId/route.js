@@ -1,6 +1,6 @@
 import { Blog } from "@/models/Bog.models";
 
-export async function POST(request) {
+export async function GET(request) {
   try {
     const searchingId = request.nextUrl.searchParams.get("id");
     const data = await Blog.findById(searchingId);

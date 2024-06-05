@@ -17,7 +17,7 @@ const Page = () => {
   useEffect(() => {
     const getBlog = async () => {
       try {
-        const response = await axios.post(
+        const response = await axios.get(
           `${process.env.NEXT_PUBLIC_URL}/api/fetchBlogWithId?id=${id}`
         );
         if (response.data) {
