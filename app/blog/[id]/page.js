@@ -9,6 +9,7 @@ import UserComponent from "@/components/userComponent";
 
 const Page = () => {
   const { id } = useParams();
+  console.log("id: ", id);
   const [blog, setBlog] = useState(null);
   const [content, setContent] = useState("");
   const [allComments, setAllComments] = useState(null);
