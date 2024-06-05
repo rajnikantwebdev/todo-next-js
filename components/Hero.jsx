@@ -5,25 +5,28 @@ import AddBlogIcon from "./AddBlogIcon";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Blog } from "@/models/Bog.models";
 
-const Hero = () => {
-  const [blogs, setBlogs] = useState();
-  const getData = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_URL}/api/fetchBlog`
-      );
-      if (response) {
-        setBlogs(response?.data?.data);
-      }
-    } catch (error) {
-      throw new Error(error?.message || "Fetching Blog failed");
-    }
-  };
+const Hero = ({ blogs }) => {
+  // const [blogs, setBlogs] = useState();
+  // const getData = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.NEXT_PUBLIC_URL}/api/fetchBlog`
+  //     );
+  //     if (response) {
+  //       setBlogs(response?.data?.data);
+  //     }
+  //   } catch (error) {
+  //     throw new Error(error?.message || "Fetching Blog failed");
+  //   }
+  // };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
+  console.log("blogs: ", blogs);
 
   return (
     <section className="flex gap-12 py-8 px-8 flex-wrap">

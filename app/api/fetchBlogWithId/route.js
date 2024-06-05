@@ -1,5 +1,7 @@
 import { Blog } from "@/models/Bog.models";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request) {
   try {
     const searchingId = request.nextUrl.searchParams.get("id");
